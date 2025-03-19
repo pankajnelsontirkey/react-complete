@@ -12,13 +12,15 @@ function App() {
   };
   let tabContent = <p>Please select a topic...</p>;
   if (selectedTopic) {
-    <div id='tab-content'>
-      <h3>{EXAMPLES[selectedTopic]?.title}</h3>
-      <p>{EXAMPLES[selectedTopic]?.description}</p>
-      <pre>
-        <code>{EXAMPLES[selectedTopic]?.code}</code>
-      </pre>
-    </div>;
+    tabContent = (
+      <div id='tab-content'>
+        <h3>{EXAMPLES[selectedTopic]?.title}</h3>
+        <p>{EXAMPLES[selectedTopic]?.description}</p>
+        <pre>
+          <code>{EXAMPLES[selectedTopic]?.code}</code>
+        </pre>
+      </div>
+    );
   }
 
   return (
@@ -27,10 +29,13 @@ function App() {
       <main>
         <section id='core-concepts'>
           <ul>
-            <CoreConcept {...CORE_CONCEPTS[0]} />
-            <CoreConcept {...CORE_CONCEPTS[1]} />
+            {CORE_CONCEPTS?.length &&
+              CORE_CONCEPTS.map((conceptItem) => {
+                return <CoreConcept key={conceptItem.title} {...conceptItem} />;
+              })}
+            {/* <CoreConcept {...CORE_CONCEPTS[1]} />
             <CoreConcept {...CORE_CONCEPTS[2]} />
-            <CoreConcept {...CORE_CONCEPTS[3]} />
+            <CoreConcept {...CORE_CONCEPTS[3]} /> */}
           </ul>
         </section>
         <section id='examples'>
