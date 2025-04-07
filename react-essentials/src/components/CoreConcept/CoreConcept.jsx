@@ -1,6 +1,6 @@
 import './CoreConcept.css';
 
-export function CoreConcept({ title, image, description }) {
+export default function CoreConcept({ title, image, description }) {
   return (
     <li>
       <img src={image} alt={title} />

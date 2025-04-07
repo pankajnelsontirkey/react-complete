@@ -1,5 +1,5 @@
 import { CORE_CONCEPTS } from '../data';
-import { CoreConcept } from './CoreConcept/CoreConcept';
+import CoreConcept from './CoreConcept/CoreConcept';
 import Section from './Section';
 
 export default function CoreConcepts() {
