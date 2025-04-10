@@ -4,8 +4,8 @@ import GameBoard from './components/GameBoard';
 import GameOver from './components/GameOver';
 import Log from './components/Log';
 import Player from './components/Player';
+import { GAME_STATE, INITIAL_GAME_BOARD, PLAYERS } from './utils/gameConstants';
 import { runGameLoop } from './utils/gameUtils';
-import { GAME_STATE, INITIAL_GAME_BOARD } from './utils/gameConstants';
 
 const getDerivedActivePlayer = (gameTurns) => {
   let currentPlayer = 'X';
@@ -18,12 +18,13 @@ const getDerivedActivePlayer = (gameTurns) => {
 };
 
 function App() {
+  const [players, setPlayers] = useState(PLAYERS);
   const [gameTurns, setGameTurns] = useState([]);
 
   const currentPlayer = getDerivedActivePlayer(gameTurns);
 
   let gameboard = INITIAL_GAME_BOARD.map((_, r) =>
-    row.map((__, c) => INITIAL_GAME_BOARD[r][c])
+    _.map((__, c) => INITIAL_GAME_BOARD[r][c])
   );
 
   for (const turn of gameTurns) {
@@ -38,6 +39,10 @@ function App() {
   if (gameTurns.length) {
     runGameLoop(gameboard);
   }
+
+  const handleSavePlayerName = (symbol, newName) => {
+    setPlayers((prev) => ({ ...prev, [symbol]: newName }));
+  };
 
   const handleSwitchPlayerTurn = (rowIndex, colIndex) => {
     setGameTurns((prevTurns) => {
@@ -65,20 +70,23 @@ function App() {
         <div id='game-container'>
           <ol id='players' className='highlight-player'>
             <Player
-              defaultName={'Player 1'}
+              defaultName={players['X']}
               symbol={'X'}
               isActive={currentPlayer === 'X'}
+              savePlayer={handleSavePlayerName}
             />
             <Player
-              defaultName={'Player 2'}
+              defaultName={players['O']}
               symbol={'O'}
               isActive={currentPlayer === 'O'}
+              savePlayer={handleSavePlayerName}
             />
           </ol>
           {GAME_STATE['winner'] && (
             <GameOver
               winner={GAME_STATE['winner']}
               onRematch={handleResetGame}
+              players={players}
             />
           )}
           <GameBoard

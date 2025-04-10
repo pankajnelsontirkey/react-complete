@@ -1,4 +1,4 @@
-import { gameState } from '../App';
+import { GAME_STATE } from '../utils/gameConstants';
 
 export default function GameBoard({
   onSelectSquare /* activePlayerSymbol */,
@@ -17,7 +17,7 @@ export default function GameBoard({
                     /* () => handleSelectCell(rowIndex, colIndex) */
                   }
                   // disabled={!!gameboard[rowIndex][colIndex]}
-                  disabled={!!playerSymbol || gameState['gameOver']}
+                  disabled={!!playerSymbol || GAME_STATE['gameOver']}
                 >
                   {playerSymbol}
                 </button>

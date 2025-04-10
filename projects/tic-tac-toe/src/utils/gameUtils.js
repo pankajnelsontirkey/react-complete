@@ -1,15 +1,15 @@
-import { gameState } from '../App';
+import { GAME_STATE } from './gameConstants';
 
 const checkWinCondition = (array_3) => {
   if (array_3.every((val) => val === 'X')) {
-    gameState['gameOver'] = true;
-    gameState['winner'] = 'X';
+    GAME_STATE['gameOver'] = true;
+    GAME_STATE['winner'] = 'X';
   }
   if (array_3.every((val) => val === 'O')) {
-    gameState['gameOver'] = true;
-    gameState['winner'] = 'O';
+    GAME_STATE['gameOver'] = true;
+    GAME_STATE['winner'] = 'O';
   }
-  return gameState['gameOver']; // returning true to satisfy boolean condition in some
+  return GAME_STATE['gameOver']; // returning true to satisfy boolean condition in some
 };
 
 const checkLine = (line) => {
@@ -20,7 +20,7 @@ const checkLine = (line) => {
 };
 
 const checkMovesAvailable = (board) => {
-  if (gameState['gameOver']) {
+  if (GAME_STATE['gameOver']) {
     return;
   }
 
@@ -29,8 +29,8 @@ const checkMovesAvailable = (board) => {
   if (flattenedBoard.some((cell) => cell === null)) {
     return;
   } else {
-    gameState['gameOver'] = true;
-    gameState['winner'] = 'draw';
+    GAME_STATE['gameOver'] = true;
+    GAME_STATE['winner'] = 'draw';
   }
 };
 
