@@ -1,7 +1,11 @@
 import { useState } from 'react';
+
 import GameBoard from './components/GameBoard';
+import GameOver from './components/GameOver';
 import Log from './components/Log';
 import Player from './components/Player';
+import { runGameLoop } from './utils/gameUtils';
+import { GAME_STATE, INITIAL_GAME_BOARD } from './utils/gameConstants';
 
 const getDerivedActivePlayer = (gameTurns) => {
   let currentPlayer = 'X';
@@ -15,13 +19,27 @@ const getDerivedActivePlayer = (gameTurns) => {
 
 function App() {
   const [gameTurns, setGameTurns] = useState([]);
-  // const [activePlayer, setActivePlayer] = useState('X');
 
   const currentPlayer = getDerivedActivePlayer(gameTurns);
 
-  const handleSwitchPlayerTurn = (rowIndex, colIndex) => {
-    // setActivePlayer((currentPlayer) => (currentPlayer === 'X' ? 'O' : 'X'));
+  let gameboard = INITIAL_GAME_BOARD.map((_, r) =>
+    row.map((__, c) => INITIAL_GAME_BOARD[r][c])
+  );
 
+  for (const turn of gameTurns) {
+    const {
+      square: { row, col },
+      player
+    } = turn;
+
+    gameboard[row][col] = player;
+  }
+
+  if (gameTurns.length) {
+    runGameLoop(gameboard);
+  }
+
+  const handleSwitchPlayerTurn = (rowIndex, colIndex) => {
     setGameTurns((prevTurns) => {
       let currentPlayer = getDerivedActivePlayer(prevTurns);
 
@@ -32,6 +50,13 @@ function App() {
 
       return updatedTurns;
     });
+  };
+
+  const handleResetGame = () => {
+    gameboard = INITIAL_GAME_BOARD;
+    GAME_STATE['winner'] = null;
+    GAME_STATE['gameOver'] = false;
+    setGameTurns([]);
   };
 
   return (
@@ -50,10 +75,16 @@ function App() {
               isActive={currentPlayer === 'O'}
             />
           </ol>
+          {GAME_STATE['winner'] && (
+            <GameOver
+              winner={GAME_STATE['winner']}
+              onRematch={handleResetGame}
+            />
+          )}
           <GameBoard
             onSelectSquare={handleSwitchPlayerTurn}
             activePlayerSymbol={currentPlayer}
-            turns={gameTurns}
+            gameboard={gameboard}
           />
         </div>
         <Log turns={gameTurns} />
