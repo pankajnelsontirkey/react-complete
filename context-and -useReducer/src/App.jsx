@@ -5,7 +5,7 @@ import { DUMMY_PRODUCTS } from './dummy-products';
 import Header from './components/Header';
 import Product from './components/Product';
 import Shop from './components/Shop';
-import { CartContext } from './store/CartContext';
+import { CartContext } from './store/cartContext';
 
 function App() {
   const [shoppingCart, setShoppingCart] = useState({ items: [] });
@@ -42,7 +42,7 @@ function App() {
   function handleUpdateCartItemQuantity(productId, amount) {
     setShoppingCart((prev) => {
       const updatedItems = [...prev.items];
-      const updatedItemIndex = updateItems.findIndex(
+      const updatedItemIndex = updatedItems.findIndex(
         (item) => item.id === productId
       );
 
@@ -50,25 +50,26 @@ function App() {
 
       updatedItem.quantity += amount;
 
-      if (updateItem.quantity <= 0) {
+      if (updatedItem.quantity <= 0) {
         updatedItems.splice(updatedItemIndex, 1);
       } else {
         updatedItems[updatedItemIndex] = updatedItem;
       }
-    });
 
-    return { items: updateItems };
+      return { items: updatedItems };
+    });
   }
 
   const ctxValue = {
     items: shoppingCart.items,
-    addItemToCart: handleAddItemToCart
+    addItemToCart: handleAddItemToCart,
+    updateCartItemQuantity: handleUpdateCartItemQuantity
   };
 
   return (
     <>
       <CartContext.Provider value={ctxValue}>
-        <Header onUpdateCartItemQuanity={handleUpdateCartItemQuantity} />
+        <Header />
         <Shop>
           {DUMMY_PRODUCTS.map((product) => (
             <li key={product.id}>

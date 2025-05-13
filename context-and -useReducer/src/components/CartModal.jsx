@@ -3,12 +3,7 @@ import { createPortal } from 'react-dom';
 
 import Cart from './Cart';
 
-export default function CartModal({
-  ref,
-  onUpdateCartItemQuantity,
-  title,
-  actions
-}) {
+export default function CartModal({ ref, title, actions }) {
   const dialog = useRef();
 
   useImperativeHandle(ref, () => {
@@ -22,7 +17,7 @@ export default function CartModal({
   return createPortal(
     <dialog id='modal' ref={dialog}>
       <h2>{title}</h2>
-      <Cart onUpdateCartItemQuantity={onUpdateCartItemQuantity} />
+      <Cart />
       <form action='dialog' id='modal-actions'>
         {actions}
       </form>
