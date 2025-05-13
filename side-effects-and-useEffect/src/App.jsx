@@ -13,8 +13,6 @@ const storedPlaces = storedPlaceIds.map((id) =>
   AVAILABLE_PLACES.find((place) => place.id === id)
 );
 
-console.log(storedPlaces);
-
 function App() {
   const selectedPlace = useRef();
   const [modalIsOpen, setModalIsOpen] = useState(false);
