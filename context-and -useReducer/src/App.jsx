@@ -5,6 +5,7 @@ import { DUMMY_PRODUCTS } from './dummy-products';
 import Header from './components/Header';
 import Product from './components/Product';
 import Shop from './components/Shop';
+import { CartContext } from './store/CartContext';
 
 function App() {
   const [shoppingCart, setShoppingCart] = useState({ items: [] });
@@ -61,17 +62,16 @@ function App() {
 
   return (
     <>
-      <Header
-        cart={shoppingCart}
-        onUpdateCartItemQuanity={handleUpdateCartItemQuantity}
-      />
-      <Shop>
-        {DUMMY_PRODUCTS.map((product) => (
-          <li key={product.id}>
-            <Product {...product} onAddToCart={handleAddItemToCart} />
-          </li>
-        ))}
-      </Shop>
+      <CartContext.Provider value={{ items: [] }}>
+        <Header onUpdateCartItemQuanity={handleUpdateCartItemQuantity} />
+        <Shop>
+          {DUMMY_PRODUCTS.map((product) => (
+            <li key={product.id}>
+              <Product {...product} onAddToCart={handleAddItemToCart} />
+            </li>
+          ))}
+        </Shop>
+      </CartContext.Provider>
     </>
   );
 }

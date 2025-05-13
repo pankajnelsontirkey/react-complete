@@ -5,7 +5,6 @@ import Cart from './Cart';
 
 export default function CartModal({
   ref,
-  cartItems,
   onUpdateCartItemQuantity,
   title,
   actions
@@ -23,10 +22,7 @@ export default function CartModal({
   return createPortal(
     <dialog id='modal' ref={dialog}>
       <h2>{title}</h2>
-      <Cart
-        items={cartItems}
-        onUpdateCartItemQuantity={onUpdateCartItemQuantity}
-      />
+      <Cart onUpdateCartItemQuantity={onUpdateCartItemQuantity} />
       <form action='dialog' id='modal-actions'>
         {actions}
       </form>
