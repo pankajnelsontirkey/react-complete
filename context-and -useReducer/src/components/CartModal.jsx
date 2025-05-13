@@ -18,7 +18,7 @@ export default function CartModal({ ref, title, actions }) {
     <dialog id='modal' ref={dialog}>
       <h2>{title}</h2>
       <Cart />
-      <form action='dialog' id='modal-actions'>
+      <form method='dialog' id='modal-actions'>
         {actions}
       </form>
     </dialog>,
