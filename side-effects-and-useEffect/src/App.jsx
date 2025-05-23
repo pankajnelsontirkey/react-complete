@@ -8,7 +8,8 @@ import Modal from './components/Modal';
 import Places from './components/Places';
 import { sortPlacesByDistance } from './loc';
 
-const storedPlaceIds = JSON.parse(localStorage.getItem('selectedPlaces') || []);
+const storedPlaceIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+
 const storedPlaces = storedPlaceIds.map((id) =>
   AVAILABLE_PLACES.find((place) => place.id === id)
 );
