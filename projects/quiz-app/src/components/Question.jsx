@@ -11,7 +11,7 @@ export default function Question({
 }) {
   const [answer, setAnswer] = useState({ selectedAnswer: '', isCorrect: null });
 
-  let timer = 10000;
+  let timer = 5000;
 
   if (answer.selectedAnswer) {
     timer = 1000;
