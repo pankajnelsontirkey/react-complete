@@ -1,4 +1,4 @@
-import { log } from '../../log';
+import { log } from '../../../log';
 
 export default function MinusIcon(props) {
   log('<MinusIcon /> rendered', 3);
