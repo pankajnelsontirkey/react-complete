@@ -1,9 +1,11 @@
-import Users from './components/Users.jsx';
+import UserFinder from './components/UserFinder.jsx';
+// import Users from './components/Users.jsx';
 
 function App() {
   return (
     <div>
-      <Users />
+      {/* <Users /> */}
+      <UserFinder />
     </div>
   );
 }
