@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import logoImg from './assets/logo.png';
 import AvailablePlaces from './components/AvailablePlaces.jsx';
@@ -6,38 +6,22 @@ import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import ErrorPage from './components/Error.jsx';
 import Modal from './components/Modal.jsx';
 import Places from './components/Places.jsx';
+import { useFetch } from './hooks/useFetch.js';
 import { fetchUserPlaces, updateUserPlaces } from './http.js';
 
 function App() {
   const selectedPlace = useRef();
 
-  const [userPlaces, setUserPlaces] = useState([]);
   const [errorUpdatingPlaces, setErrorUpdatingPlaces] = useState();
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState();
-
-  useEffect(() => {
-    async function fetchPlaces() {
-      try {
-        setIsFetching(true);
-        const places = await fetchUserPlaces();
-
-        setUserPlaces(places);
-      } catch (error) {
-        console.log('error', error);
-        setUserPlaces(userPlaces);
-        setIsFetching(false);
-        setError({
-          message: error.message || 'Error while fetching user places!'
-        });
-      }
-      setIsFetching(false);
-    }
-    fetchPlaces();
-  }, []);
+  const {
+    isFetching,
+    error,
+    fetchedData: userPlaces,
+    setFetchedData: setUserPlaces
+  } = useFetch(fetchUserPlaces, []);
 
   function handleStartRemovePlace(place) {
     setModalIsOpen(true);
@@ -49,13 +33,17 @@ function App() {
   }
 
   async function handleSelectPlace(selectedPlace) {
+    const alreadyExists = userPlaces.find(
+      (place) => place.id === selectedPlace.id
+    );
+    if (alreadyExists) {
+      return;
+    }
     setUserPlaces((prevPickedPlaces) => {
       if (!prevPickedPlaces) {
         prevPickedPlaces = [];
       }
-      if (prevPickedPlaces.some((place) => place.id === selectedPlace.id)) {
-        return prevPickedPlaces;
-      }
+
       return [selectedPlace, ...prevPickedPlaces];
     });
     try {
@@ -91,7 +79,7 @@ function App() {
 
       setModalIsOpen(false);
     },
-    [userPlaces]
+    [userPlaces, setUserPlaces]
   );
 
   function handleError() {
@@ -134,7 +122,7 @@ function App() {
             loadingText='Fetching saved places...'
             isLoading={isFetching}
             fallbackText='Select the places you would like to visit below.'
-            places={userPlaces}
+            places={userPlaces?.length ? userPlaces : []}
             onSelectPlace={handleStartRemovePlace}
           />
         ) : null}
