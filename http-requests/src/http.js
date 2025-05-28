@@ -8,6 +8,7 @@ export async function fetchAvailablePlaces() {
 
   return data.places;
 }
+
 export async function updateUserPlaces(places) {
   const response = await fetch('http://localhost:3000/user-places', {
     method: 'PUT',
@@ -23,4 +24,15 @@ export async function updateUserPlaces(places) {
   }
 
   return data;
+}
+
+export async function fetchUserPlaces() {
+  const response = await fetch('http://localhost:3000/user-places');
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error('Error while fetching user places');
+  }
+
+  return data.places;
 }
