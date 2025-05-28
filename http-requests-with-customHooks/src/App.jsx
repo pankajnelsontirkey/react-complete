@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import logoImg from './assets/logo.png';
 import AvailablePlaces from './components/AvailablePlaces.jsx';
@@ -6,8 +6,8 @@ import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import ErrorPage from './components/Error.jsx';
 import Modal from './components/Modal.jsx';
 import Places from './components/Places.jsx';
-import { fetchUserPlaces, updateUserPlaces } from './http.js';
 import { useFetch } from './hooks/useFetch.js';
+import { fetchUserPlaces, updateUserPlaces } from './http.js';
 
 function App() {
   const selectedPlace = useRef();
@@ -19,7 +19,8 @@ function App() {
   const {
     isFetching,
     error,
-    fetchedData: userPlaces
+    fetchedData: userPlaces,
+    setFetchedData: setUserPlaces
   } = useFetch(fetchUserPlaces, []);
 
   function handleStartRemovePlace(place) {
@@ -31,51 +32,55 @@ function App() {
     setModalIsOpen(false);
   }
 
-  // async function handleSelectPlace(selectedPlace) {
-  //   setUserPlaces((prevPickedPlaces) => {
-  //     if (!prevPickedPlaces) {
-  //       prevPickedPlaces = [];
-  //     }
-  //     if (prevPickedPlaces.some((place) => place.id === selectedPlace.id)) {
-  //       return prevPickedPlaces;
-  //     }
-  //     return [selectedPlace, ...prevPickedPlaces];
-  //   });
-  //   try {
-  //     await updateUserPlaces([...userPlaces, selectedPlace]);
-  //   } catch (error) {
-  //     console.log(error);
-  //     setUserPlaces(userPlaces);
-  //     setErrorUpdatingPlaces({
-  //       message: error.message || 'Failed to update places!'
-  //     });
-  //   }
-  // }
+  async function handleSelectPlace(selectedPlace) {
+    const alreadyExists = userPlaces.find(
+      (place) => place.id === selectedPlace.id
+    );
+    if (alreadyExists) {
+      return;
+    }
+    setUserPlaces((prevPickedPlaces) => {
+      if (!prevPickedPlaces) {
+        prevPickedPlaces = [];
+      }
 
-  // const handleRemovePlace = useCallback(
-  //   async function handleRemovePlace() {
-  //     setUserPlaces((prevPickedPlaces) =>
-  //       prevPickedPlaces.filter(
-  //         (place) => place.id !== selectedPlace.current.id
-  //       )
-  //     );
+      return [selectedPlace, ...prevPickedPlaces];
+    });
+    try {
+      await updateUserPlaces([...userPlaces, selectedPlace]);
+    } catch (error) {
+      console.log(error);
+      setUserPlaces(userPlaces);
+      setErrorUpdatingPlaces({
+        message: error.message || 'Failed to update places!'
+      });
+    }
+  }
 
-  //     try {
-  //       await updateUserPlaces(
-  //         userPlaces.filter((place) => place.id !== selectedPlace.current.id)
-  //       );
-  //     } catch (error) {
-  //       console.log('error', error);
-  //       setUserPlaces(userPlaces);
-  //       setErrorUpdatingPlaces({
-  //         message: error.message || 'Failed to delete place'
-  //       });
-  //     }
+  const handleRemovePlace = useCallback(
+    async function handleRemovePlace() {
+      setUserPlaces((prevPickedPlaces) =>
+        prevPickedPlaces.filter(
+          (place) => place.id !== selectedPlace.current.id
+        )
+      );
 
-  //     setModalIsOpen(false);
-  //   },
-  //   [userPlaces]
-  // );
+      try {
+        await updateUserPlaces(
+          userPlaces.filter((place) => place.id !== selectedPlace.current.id)
+        );
+      } catch (error) {
+        console.log('error', error);
+        setUserPlaces(userPlaces);
+        setErrorUpdatingPlaces({
+          message: error.message || 'Failed to delete place'
+        });
+      }
+
+      setModalIsOpen(false);
+    },
+    [userPlaces, setUserPlaces]
+  );
 
   function handleError() {
     setErrorUpdatingPlaces(null);
@@ -95,7 +100,7 @@ function App() {
       <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
-          // onConfirm={handleRemovePlace}
+          onConfirm={handleRemovePlace}
         />
       </Modal>
 
@@ -122,7 +127,7 @@ function App() {
           />
         ) : null}
 
-        <AvailablePlaces /* onSelectPlace={handleSelectPlace} */ />
+        <AvailablePlaces onSelectPlace={handleSelectPlace} />
       </main>
     </>
   );
