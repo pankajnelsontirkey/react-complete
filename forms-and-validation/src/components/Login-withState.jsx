@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import Input from './Input';
+
 export default function Login() {
   const [values, setValues] = useState({
     email: '',
@@ -12,6 +14,8 @@ export default function Login() {
   });
 
   const emailIsInvalid = valuesTouched.email && !values.email.includes('@');
+  const passwordIsInvalid =
+    valuesTouched.password && values.password.trim().length < 6;
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -32,32 +36,27 @@ export default function Login() {
       <h2>Login</h2>
 
       <div className='control-row'>
-        <div className='control no-margin'>
-          <label htmlFor='email'>Email</label>
-          <input
-            id='email'
-            type='email'
-            name='email'
-            onBlur={handleInputBlur}
-            onChange={handleValueChange}
-            value={values.email}
-          />
-          <div className='control-error'>
-            {emailIsInvalid ? <p>Please enter a valid email address</p> : null}
-          </div>
-        </div>
+        <Input
+          label='Email'
+          id='email'
+          type='email'
+          name='email'
+          onBlur={handleInputBlur}
+          onChange={handleValueChange}
+          value={values.email}
+          error={emailIsInvalid ? 'Please enter a valid email address' : null}
+        />
 
-        <div className='control no-margin'>
-          <label htmlFor='password'>Password</label>
-          <input
-            id='password'
-            type='password'
-            name='password'
-            onBlur={handleInputBlur}
-            onChange={handleValueChange}
-            value={values.password}
-          />
-        </div>
+        <Input
+          label='Password'
+          id='password'
+          type='password'
+          name='password'
+          onBlur={handleInputBlur}
+          onChange={handleValueChange}
+          value={values.password}
+          error={passwordIsInvalid ? 'Password is too short!' : null}
+        />
       </div>
 
       <p className='form-actions'>

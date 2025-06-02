@@ -28,7 +28,13 @@ export default function Login() {
       <div className='control-row'>
         <div className='control no-margin'>
           <label htmlFor='email'>Email</label>
-          <input ref={emailRef} type='email' name='email' noValidate />
+          <input
+            ref={emailRef}
+            id='email'
+            type='email'
+            name='email'
+            noValidate
+          />
           {emailIsInvalid ? (
             <div className='control-error'>
               {emailIsInvalid ? (
@@ -40,7 +46,12 @@ export default function Login() {
 
         <div className='control no-margin'>
           <label htmlFor='password'>Password</label>
-          <input ref={passwordRef} type='password' name='password' />
+          <input
+            ref={passwordRef}
+            id='password'
+            type='password'
+            name='password'
+          />
         </div>
       </div>
 
