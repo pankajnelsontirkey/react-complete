@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import Input from './Input';
+import { hasMinLength, isEmail, isNotEmpty } from '../util/validation';
 
 export default function Login() {
   const [values, setValues] = useState({
@@ -13,9 +14,10 @@ export default function Login() {
     password: false
   });
 
-  const emailIsInvalid = valuesTouched.email && !values.email.includes('@');
+  const emailIsInvalid =
+    valuesTouched.email && !isEmail(values.email) && !isNotEmpty(values.email);
   const passwordIsInvalid =
-    valuesTouched.password && values.password.trim().length < 6;
+    valuesTouched.password && !hasMinLength(values.password, 6);
 
   function handleSubmit(e) {
     e.preventDefault();
