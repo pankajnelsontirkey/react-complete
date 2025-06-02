@@ -5,24 +5,28 @@ import Input from './Input';
 export default function Login() {
   const {
     value: email,
-    touched: emailTouched,
     handleBlur: emailBlurHandler,
-    handleChange: emailChangeHandler
-  } = useInput('');
+    handleChange: emailChangeHandler,
+    hasError: emailError
+  } = useInput(
+    '',
+    // isEmail
+    (value) => isNotEmpty(value) && isEmail(value)
+  );
 
   const {
     value: password,
-    touched: passwordTouched,
+    hasError: passwordError,
     handleBlur: passwordBlurHandler,
     handleChange: passwordChangeHandler
-  } = useInput('');
-
-  const emailIsInvalid = emailTouched && !isEmail(email) && !isNotEmpty(email);
-  const passwordIsInvalid = passwordTouched && !hasMinLength(password, 6);
+  } = useInput('', (value) => hasMinLength(value, 6));
 
   function handleSubmit(e) {
     e.preventDefault();
-    // console.log();
+    if (emailError || passwordError) {
+      return;
+    }
+    console.log(email, password);
   }
 
   return (
@@ -38,7 +42,7 @@ export default function Login() {
           onBlur={emailBlurHandler}
           onChange={emailChangeHandler}
           value={email}
-          error={emailIsInvalid ? 'Please enter a valid email address' : null}
+          error={emailError ? 'Please enter a valid email address' : null}
         />
 
         <Input
@@ -49,7 +53,7 @@ export default function Login() {
           onBlur={passwordBlurHandler}
           onChange={passwordChangeHandler}
           value={password}
-          error={passwordIsInvalid ? 'Password is too short!' : null}
+          error={passwordError ? 'Password is too short!' : null}
         />
       </div>
 
