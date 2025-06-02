@@ -1,36 +1,28 @@
-import { useState } from 'react';
-
-import Input from './Input';
+import { useInput } from '../hooks/useInput';
 import { hasMinLength, isEmail, isNotEmpty } from '../util/validation';
+import Input from './Input';
 
 export default function Login() {
-  const [values, setValues] = useState({
-    email: '',
-    password: ''
-  });
+  const {
+    value: email,
+    touched: emailTouched,
+    handleBlur: emailBlurHandler,
+    handleChange: emailChangeHandler
+  } = useInput('');
 
-  const [valuesTouched, setValuesTouched] = useState({
-    email: false,
-    password: false
-  });
+  const {
+    value: password,
+    touched: passwordTouched,
+    handleBlur: passwordBlurHandler,
+    handleChange: passwordChangeHandler
+  } = useInput('');
 
-  const emailIsInvalid =
-    valuesTouched.email && !isEmail(values.email) && !isNotEmpty(values.email);
-  const passwordIsInvalid =
-    valuesTouched.password && !hasMinLength(values.password, 6);
+  const emailIsInvalid = emailTouched && !isEmail(email) && !isNotEmpty(email);
+  const passwordIsInvalid = passwordTouched && !hasMinLength(password, 6);
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(values);
-  }
-
-  function handleValueChange({ target: { value, name } }) {
-    setValues((prevValues) => ({ ...prevValues, [name]: value }));
-    setValuesTouched((prevValues) => ({ ...prevValues, [name]: false }));
-  }
-
-  function handleInputBlur({ target: { name } }) {
-    setValuesTouched((prevValues) => ({ ...prevValues, [name]: true }));
+    // console.log();
   }
 
   return (
@@ -43,9 +35,9 @@ export default function Login() {
           id='email'
           type='email'
           name='email'
-          onBlur={handleInputBlur}
-          onChange={handleValueChange}
-          value={values.email}
+          onBlur={emailBlurHandler}
+          onChange={emailChangeHandler}
+          value={email}
           error={emailIsInvalid ? 'Please enter a valid email address' : null}
         />
 
@@ -54,9 +46,9 @@ export default function Login() {
           id='password'
           type='password'
           name='password'
-          onBlur={handleInputBlur}
-          onChange={handleValueChange}
-          value={values.password}
+          onBlur={passwordBlurHandler}
+          onChange={passwordChangeHandler}
+          value={password}
           error={passwordIsInvalid ? 'Password is too short!' : null}
         />
       </div>
