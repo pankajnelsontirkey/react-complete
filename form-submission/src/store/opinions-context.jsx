@@ -4,7 +4,7 @@ export const OpinionsContext = createContext({
   opinions: null,
   addOpinion: (opinion) => {},
   upvoteOpinion: (id) => {},
-  downvoteOpinion: (id) => {},
+  downvoteOpinion: (id) => {}
 });
 
 export function OpinionsContextProvider({ children }) {
@@ -24,9 +24,9 @@ export function OpinionsContextProvider({ children }) {
     const response = await fetch('http://localhost:3000/opinions', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(enteredOpinionData),
+      body: JSON.stringify(enteredOpinionData)
     });
 
     if (!response.ok) {
@@ -63,7 +63,7 @@ export function OpinionsContextProvider({ children }) {
     opinions: opinions,
     addOpinion,
     upvoteOpinion,
-    downvoteOpinion,
+    downvoteOpinion
   };
 
   return <OpinionsContext value={contextValue}>{children}</OpinionsContext>;
