@@ -4,7 +4,7 @@ import Error from './Error';
 import MealItem from './MealItem';
 
 export default function Meals() {
-  const { data: meals, error, isLoading } = useHttp(`${API}/meals`);
+  const { data: meals, error, isLoading } = useHttp(`${API}/meals`, {}, []);
 
   if (error) {
     return <Error title='Failed to fetch meals' message={error} />;
