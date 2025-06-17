@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useActionState, useContext } from 'react';
 
 import useHttp from '../hooks/useHttp';
 import CartContext from '../store/CartContext';
@@ -19,7 +19,7 @@ export default function Checkout() {
     headers: { 'Content-Type': 'application/json' }
   };
 
-  const { data, isLoading, error, sendRequest, clearData } = useHttp(
+  const { data, error, sendRequest, clearData } = useHttp(
     `${API}/orders`,
     requestConfig
   );
@@ -39,14 +39,18 @@ export default function Checkout() {
     clearData();
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    const formData = new FormData(event.target);
+  async function checkoutAction(prevState, formData) {
     const customerData = Object.fromEntries(formData.entries());
 
-    sendRequest(JSON.stringify({ order: { items, customer: customerData } }));
+    await sendRequest(
+      JSON.stringify({ order: { items, customer: customerData } })
+    );
   }
+
+  const [_formState, checkoutFormAction, pending] = useActionState(
+    checkoutAction,
+    null
+  );
 
   let actions = (
     <>
@@ -57,7 +61,7 @@ export default function Checkout() {
     </>
   );
 
-  if (isLoading) {
+  if (pending) {
     actions = <span>Sending order...</span>;
   }
 
@@ -84,7 +88,7 @@ export default function Checkout() {
       open={progress === 'checkout'}
       onClose={handleHideCheckout}
     >
-      <form onSubmit={handleSubmit}>
+      <form action={checkoutFormAction}>
         <h2>Checkout</h2>
         <p>Total Amount: {currencyFormatter.format(cartTotal)} </p>
         <Input label='Full Name' type='text' id='name' />
