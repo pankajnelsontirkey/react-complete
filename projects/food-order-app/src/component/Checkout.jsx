@@ -20,7 +20,18 @@ export default function Checkout() {
     hideCheckout();
   }
 
-  function handleSubmitOrder() {}
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const customerData = Object.fromEntries(formData.entries());
+
+    fetch('http://localhost:3000/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ order: { items, customer: customerData } })
+    });
+  }
 
   return (
     <Modal
@@ -28,22 +39,24 @@ export default function Checkout() {
       open={progress === 'checkout'}
       onClose={handleHideCheckout}
     >
-      <h2>Checkout</h2>
-      <p>Total Amount: {currencyFormatter.format(cartTotal)} </p>
-      <Input label='Full Name' type='text' id='fullName' />
-      <Input label='Email Address' type='email' id='email' />
-      <Input label='Street' type='text' id='street' />
-      <div className='control-row'>
-        <Input label='Postal Code' type='text' id='postalCode' />
-        <Input label='City' type='text' id='city' />
-      </div>
+      <form onSubmit={handleSubmit}>
+        <h2>Checkout</h2>
+        <p>Total Amount: {currencyFormatter.format(cartTotal)} </p>
+        <Input label='Full Name' type='text' id='name' />
+        <Input label='Email Address' type='email' id='email' />
+        <Input label='Street' type='text' id='street' />
+        <div className='control-row'>
+          <Input label='Postal Code' type='text' id='postal-code' />
+          <Input label='City' type='text' id='city' />
+        </div>
 
-      <p className='modal-actions'>
-        <Button type='button' textOnly onClick={handleHideCheckout}>
-          Close
-        </Button>
-        <Button onClick={handleSubmitOrder}>Submit Order</Button>
-      </p>
+        <p className='modal-actions'>
+          <Button type='button' textOnly onClick={handleHideCheckout}>
+            Close
+          </Button>
+          <Button>Submit Order</Button>
+        </p>
+      </form>
     </Modal>
   );
 }
