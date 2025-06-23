@@ -5,9 +5,7 @@ import Cart from './components/Cart/Cart';
 import Layout from './components/Layout/Layout';
 import Products from './components/Shop/Products';
 import Notification from './components/UI/Notification';
-import { uiActions } from './store/ui-slice';
-
-const { VITE_FIREBASE_DB_URL } = import.meta.env;
+import { fetchCart, saveCart } from './store/cart-actions';
 
 let init = true;
 
@@ -18,52 +16,18 @@ function App() {
   const notification = useSelector((state) => state.ui.notification);
 
   useEffect(() => {
-    async function saveCart() {
-      dispatch(
-        uiActions.showNotification({
-          status: 'pending',
-          title: 'Saving Cart...',
-          message: 'Saving your cart...'
-        })
-      );
-      const response = await fetch(`${VITE_FIREBASE_DB_URL}/cart.json`, {
-        method: 'PUT',
-        body: JSON.stringify(cart)
-      });
+    dispatch(fetchCart());
+  }, [dispatch]);
 
-      if (!response.ok) {
-        dispatch(
-          uiActions.showNotification({
-            status: 'error',
-            title: 'Error with saving cart!',
-            message: 'We were unable to save your cart.'
-          })
-        );
-      }
-
-      dispatch(
-        uiActions.showNotification({
-          status: 'success',
-          title: 'Cart Saved...',
-          message: 'Cart saved successfully.'
-        })
-      );
-    }
-
+  useEffect(() => {
     if (init) {
       init = false;
       return;
     }
 
-    saveCart().catch((error) => {
-      dispatch(
-        uiActions.showNotification({
-          status: 'error',
-          title: 'Error',
-          message: `${error.message}`
-        })
-      );
-    });
+    if (cart.wasUpdated) {
+      dispatch(saveCart(cart));
+    }
   }, [cart, dispatch]);
 
   return (
