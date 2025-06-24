@@ -11,7 +11,7 @@ export default function MainNavigation() {
             <Link to='/'>Home</Link>
           </li>
           <li>
-            <Link to='/'>Products</Link>
+            <Link to='/products'>Products</Link>
           </li>
         </ul>
       </nav>
