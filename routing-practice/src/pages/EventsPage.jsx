@@ -14,7 +14,7 @@ export default function EventsPage() {
       <ul>
         {DUMMY_EVENTS.map((event) => (
           <li key={event.id}>
-            <Link to={`${event.id}`} relative='path'>
+            <Link to={event.id} relative='path'>
               {event.title}
             </Link>
           </li>
