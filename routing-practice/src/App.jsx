@@ -1,6 +1,11 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { eventByIdLoader, eventsLoader } from './api/events';
+import {
+  addEventAction,
+  deleteEventAction,
+  eventByIdLoader,
+  eventsLoader
+} from './api/events';
 import EditEventPage from './pages/EditEventPage';
 import ErrorPage from './pages/ErrorPage';
 import EventDetailPage from './pages/EventDetailPage';
@@ -27,7 +32,7 @@ function App() {
               element: <EventsPage />,
               loader: eventsLoader
             },
-            { path: 'new', element: <NewEventPage /> },
+            { path: 'new', element: <NewEventPage />, action: addEventAction },
             {
               path: ':eventId',
               id: 'event-details',
@@ -35,7 +40,8 @@ function App() {
               children: [
                 {
                   index: true,
-                  element: <EventDetailPage />
+                  element: <EventDetailPage />,
+                  action: deleteEventAction
                 },
                 { path: 'edit', element: <EditEventPage /> }
               ]
