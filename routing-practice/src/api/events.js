@@ -33,12 +33,18 @@ export const eventByIdLoader = async ({ params: { eventId } }) => {
   return response;
 };
 
-export const addEventAction = async ({ request }) => {
+export const addUpdateEventAction = async ({ request, params }) => {
+  const { method } = request;
   const formData = await request.formData();
+
   const formValues = Object.fromEntries(formData.entries());
 
-  const response = await fetch(`${VITE_API_HOST}/events`, {
-    method: 'POST',
+  let url = `${VITE_API_HOST}/events`;
+
+  url += method === 'PATCH' ? `/${params.eventId}` : '';
+
+  const response = await fetch(url, {
+    method,
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ ...formValues })
   });
