@@ -5,7 +5,7 @@
   "main": "index.js",
   "module": "commonjs",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js --ignore events.json"
   },
   "keywords": [],
   "author": "",
