@@ -1,19 +1,14 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
+
+import EventItem from '../components/EventItem';
 
 export default function EventDetailPage() {
-  const navigate = useNavigate();
-  const { eventId } = useParams();
-
-  const handleNavigateBack = () => {
-    navigate('..', { relative: 'path' });
-  };
+  const { event: eventData } = useLoaderData();
 
   return (
     <>
-      <h1>Event Details Page {eventId}</h1>
-      <p>
-        <button onClick={handleNavigateBack}>Back</button>
-      </p>
+      <h1>Data Details Page</h1>
+      <EventItem event={eventData} />
     </>
   );
 }
