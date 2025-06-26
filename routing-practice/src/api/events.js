@@ -43,12 +43,17 @@ export const addEventAction = async ({ request }) => {
     body: JSON.stringify({ ...formValues })
   });
 
+  if (response.status === 422) {
+    return response;
+  }
+
   if (!response.ok) {
     throw json(
       { message: 'Could not save event!' },
       { status: response.status ?? 500 }
     );
   }
+
   return redirect('/events');
 };
 
