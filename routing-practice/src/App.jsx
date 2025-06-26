@@ -1,19 +1,21 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
+import { eventsLoader } from './api/events';
 import EditEventPage from './pages/EditEventPage';
+import ErrorPage from './pages/ErrorPage';
 import EventDetailPage from './pages/EventDetailPage';
 import EventsPage from './pages/EventsPage';
 import EventsRootPage from './pages/EventsRootPage';
 import HomePage from './pages/HomePage';
 import NewEventPage from './pages/NewEventPage';
 import RootLayoutPage from './pages/RootLayoutPage';
-import { VITE_API_HOST } from './utils/constants';
 
 function App() {
   const router = createBrowserRouter([
     {
       path: '/',
       element: <RootLayoutPage />,
+      errorElement: <ErrorPage />,
       children: [
         { index: true, element: <HomePage /> },
         {
@@ -21,18 +23,9 @@ function App() {
           element: <EventsRootPage />,
           children: [
             {
-              path: '',
+              index: true,
               element: <EventsPage />,
-              loader: async () => {
-                const response = await fetch(`${VITE_API_HOST}/events`);
-
-                if (!response.ok) {
-                  // setError('Fetching events failed.');
-                } else {
-                  const resData = await response.json();
-                  return resData.events;
-                }
-              }
+              loader: eventsLoader
             },
             { path: 'new', element: <NewEventPage /> },
             { path: ':eventId', element: <EventDetailPage /> },
