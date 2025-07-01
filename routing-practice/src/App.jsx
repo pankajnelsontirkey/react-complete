@@ -5,7 +5,8 @@ import {
   deleteEventAction,
   eventByIdLoader,
   eventsLoader
-} from './api/events';
+} from './actions/events';
+import { newsletterAction } from './actions/newsletter';
 import EditEventPage from './pages/EditEventPage';
 import ErrorPage from './pages/ErrorPage';
 import EventDetailPage from './pages/EventDetailPage';
@@ -13,6 +14,7 @@ import EventsPage from './pages/EventsPage';
 import EventsRootPage from './pages/EventsRootPage';
 import HomePage from './pages/HomePage';
 import NewEventPage from './pages/NewEventPage';
+import NewsletterPage from './pages/NewsletterPage';
 import RootLayoutPage from './pages/RootLayoutPage';
 
 function App() {
@@ -55,6 +57,11 @@ function App() {
               ]
             }
           ]
+        },
+        {
+          path: 'newsletter',
+          element: <NewsletterPage />,
+          action: newsletterAction
         }
       ]
     }
