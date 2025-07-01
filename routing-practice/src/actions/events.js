@@ -1,8 +1,8 @@
-import { json, redirect } from 'react-router-dom';
+import { defer, json, redirect } from 'react-router-dom';
 
 import { VITE_API_HOST } from '../utils/constants';
 
-export const eventsLoader = async () => {
+const fetchEvents = async () => {
   const response = await fetch(`${VITE_API_HOST}/events`);
 
   if (!response.ok) {
@@ -15,13 +15,15 @@ export const eventsLoader = async () => {
       { status: response.status ?? 500 }
     );
   } else {
-    // const resData = await response.json();
-    // return resData.events;
-    return response;
+    // return response;
+    const { events } = await response.json();
+    return events;
   }
 };
 
-export const eventByIdLoader = async ({ params: { eventId } }) => {
+export const eventsLoader = () => defer({ events: fetchEvents() });
+
+const fetchEventById = async (eventId) => {
   const response = await fetch(`${VITE_API_HOST}/events/${eventId}`);
 
   if (!response.ok) {
@@ -30,8 +32,13 @@ export const eventByIdLoader = async ({ params: { eventId } }) => {
       { status: response.status ?? 500 }
     );
   }
-  return response;
+  // return response;
+  const { event } = await response.json();
+  return event;
 };
+
+export const eventByIdLoader = async ({ params: { eventId } }) =>
+  defer({ event: await fetchEventById(eventId), events: fetchEvents() });
 
 export const addUpdateEventAction = async ({ request, params }) => {
   const { method } = request;
