@@ -1,17 +1,9 @@
-import { useNavigate } from 'react-router-dom';
+import EventForm from '../components/EventForm';
 
 export default function NewEventPage() {
-  const navigate = useNavigate();
-
-  const handleNavigateBack = () => {
-    navigate('..', { relative: 'path' });
-  };
   return (
     <>
-      <h1>New Event Page</h1>
-      <p>
-        <button onClick={handleNavigateBack}>Back</button>
-      </p>
+      <EventForm method='post' />
     </>
   );
 }

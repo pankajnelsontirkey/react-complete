@@ -1,25 +1,22 @@
-import { Link } from 'react-router-dom';
+import { Suspense } from 'react';
+import { Await, useLoaderData } from 'react-router-dom';
 
-const DUMMY_EVENTS = [
-  { id: 'e1', title: 'event 1' },
-  { id: 'e2', title: 'event 2' },
-  { id: 'e3', title: 'event 3' },
-  { id: 'e4', title: 'event 4' },
-  { id: 'e5', title: 'event 5' }
-];
+import EventsList from '../components/EventsList';
 
-export default function EventsPage() {
+function EventsPage() {
+  const { events /* , isError, message */ } = useLoaderData();
+
+  // if (isError) {
+  //   return <p>{message}</p>;
+  // }
+
   return (
-    <>
-      <ul>
-        {DUMMY_EVENTS.map((event) => (
-          <li key={event.id}>
-            <Link to={event.id} relative='path'>
-              {event.title}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </>
+    <Suspense fallback={<p style={{ textAlign: 'center' }}>Loading...</p>}>
+      <Await resolve={events}>
+        {(events) => <EventsList events={events} />}
+      </Await>
+    </Suspense>
   );
 }
+
+export default EventsPage;

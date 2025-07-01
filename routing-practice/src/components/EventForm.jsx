@@ -1,38 +1,81 @@
-import { useNavigate } from 'react-router-dom';
+import {
+  Form,
+  useActionData,
+  useNavigate,
+  useNavigation
+} from 'react-router-dom';
 
 import classes from './EventForm.module.css';
 
 function EventForm({ method, event }) {
   const navigate = useNavigate();
+  const navigation = useNavigation();
+  const actionData = useActionData();
+
+  const isSubmitting = navigation.state === 'submitting';
+
   function cancelHandler() {
     navigate('..');
   }
 
   return (
-    <form className={classes.form}>
+    <Form method={method} className={classes.form}>
+      {actionData?.errors ? (
+        <ul>
+          {Object.values(actionData.errors).map((err) => (
+            <li key={err}>{err}</li>
+          ))}
+        </ul>
+      ) : null}
       <p>
-        <label htmlFor="title">Title</label>
-        <input id="title" type="text" name="title" required />
+        <label htmlFor='title'>Title</label>
+        <input
+          id='title'
+          type='text'
+          name='title'
+          required
+          defaultValue={event?.title ? event.title : ''}
+        />
       </p>
       <p>
-        <label htmlFor="image">Image</label>
-        <input id="image" type="url" name="image" required />
+        <label htmlFor='image'>Image</label>
+        <input
+          id='image'
+          type='url'
+          name='image'
+          required
+          defaultValue={event?.image ?? ''}
+        />
       </p>
       <p>
-        <label htmlFor="date">Date</label>
-        <input id="date" type="date" name="date" required />
+        <label htmlFor='date'>Date</label>
+        <input
+          id='date'
+          type='date'
+          name='date'
+          required
+          defaultValue={event?.date ?? ''}
+        />
       </p>
       <p>
-        <label htmlFor="description">Description</label>
-        <textarea id="description" name="description" rows="5" required />
+        <label htmlFor='description'>Description</label>
+        <textarea
+          id='description'
+          name='description'
+          rows='5'
+          required
+          defaultValue={event?.description ?? ''}
+        />
       </p>
       <div className={classes.actions}>
-        <button type="button" onClick={cancelHandler}>
+        <button type='button' onClick={cancelHandler} disabled={isSubmitting}>
           Cancel
         </button>
-        <button>Save</button>
+        <button disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting...' : 'Save'}
+        </button>
       </div>
-    </form>
+    </Form>
   );
 }
 
