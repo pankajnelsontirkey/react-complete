@@ -1,15 +1,15 @@
 const { sign, verify } = require('jsonwebtoken');
 const { compare } = require('bcryptjs');
-const { NotAuthError } = require('./errors');
 
-const KEY = 'supersecret';
+const { NotAuthError } = require('./errors');
+const { SECRET } = require('./constants');
 
 function createJSONToken(email) {
-  return sign({ email }, KEY, { expiresIn: '1h' });
+  return sign({ email }, SECRET, { expiresIn: '1h' });
 }
 
 function validateJSONToken(token) {
-  return verify(token, KEY);
+  return verify(token, SECRET);
 }
 
 function isValidPassword(password, storedPassword) {
