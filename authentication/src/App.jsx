@@ -7,6 +7,7 @@ import {
   eventsLoader
 } from './actions/events';
 import { newsletterAction } from './actions/newsletter';
+import AuthenticationPage from './pages/Authentication';
 import EditEventPage from './pages/EditEvent';
 import ErrorPage from './pages/Error';
 import EventDetailPage from './pages/EventDetail';
@@ -61,7 +62,8 @@ const router = createBrowserRouter([
         path: 'newsletter',
         element: <NewsletterPage />,
         action: newsletterAction
-      }
+      },
+      { path: 'auth', element: <AuthenticationPage /> }
     ]
   }
 ]);
