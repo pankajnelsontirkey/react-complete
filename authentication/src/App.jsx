@@ -1,6 +1,6 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { loginSignupAction } from './actions/auth';
+import { loginSignupAction, logoutAction, tokenLoader } from './actions/auth';
 import {
   addUpdateEventAction,
   deleteEventAction,
@@ -24,6 +24,8 @@ const router = createBrowserRouter([
     path: '/',
     element: <RootLayout />,
     errorElement: <ErrorPage />,
+    id: 'root',
+    loader: tokenLoader,
     children: [
       { index: true, element: <HomePage /> },
       {
@@ -68,6 +70,10 @@ const router = createBrowserRouter([
         path: 'auth',
         element: <AuthenticationPage />,
         action: loginSignupAction
+      },
+      {
+        path: 'logout',
+        action: logoutAction
       }
     ]
   }
