@@ -1,6 +1,6 @@
 import { redirect } from 'react-router-dom';
 
-import { VITE_API_HOST } from '../utils/constants';
+import { API_HOST } from '../utils/constants';
 
 export const loginSignupAction = async ({ request }) => {
   const searchParams = new URL(request.url).searchParams;
@@ -15,7 +15,7 @@ export const loginSignupAction = async ({ request }) => {
     );
   }
 
-  const response = await fetch(`${VITE_API_HOST}/${mode}`, {
+  const response = await fetch(`${API_HOST}/${mode}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password })
@@ -33,6 +33,10 @@ export const loginSignupAction = async ({ request }) => {
       )
     );
   }
+
+  const { token } = await response.json();
+
+  localStorage.setItem('token', token);
 
   return redirect('/');
 };

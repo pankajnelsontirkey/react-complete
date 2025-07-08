@@ -1,9 +1,10 @@
 import { redirect } from 'react-router-dom';
 
-import { VITE_API_HOST } from '../utils/constants';
+import { getAuthToken } from '../utils/auth';
+import { API_HOST } from '../utils/constants';
 
 const fetchEvents = async () => {
-  const response = await fetch(`${VITE_API_HOST}/events`);
+  const response = await fetch(`${API_HOST}/events`);
 
   if (!response.ok) {
     throw new Response(
@@ -21,7 +22,7 @@ const fetchEvents = async () => {
 export const eventsLoader = () => ({ events: fetchEvents() });
 
 const fetchEventById = async (eventId) => {
-  const response = await fetch(`${VITE_API_HOST}/events/${eventId}`);
+  const response = await fetch(`${API_HOST}/events/${eventId}`);
 
   if (!response.ok) {
     throw new Response(
@@ -46,13 +47,18 @@ export const addUpdateEventAction = async ({ request, params }) => {
 
   const formValues = Object.fromEntries(formData.entries());
 
-  let url = `${VITE_API_HOST}/events`;
+  let url = `${API_HOST}/events`;
 
   url += method === 'PATCH' ? `/${params.eventId}` : '';
 
+  const token = getAuthToken();
+
   const response = await fetch(url, {
     method,
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
     body: JSON.stringify({ ...formValues })
   });
 
@@ -76,8 +82,13 @@ export const deleteEventAction = async ({
   request: { method },
   params: { eventId }
 }) => {
-  const response = await fetch(`${VITE_API_HOST}/events/${eventId}`, {
-    method
+  const token = getAuthToken();
+
+  const response = await fetch(`${API_HOST}/events/${eventId}`, {
+    method,
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
   });
 
   if (!response.ok) {
