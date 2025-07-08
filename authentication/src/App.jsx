@@ -1,6 +1,11 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { loginSignupAction, logoutAction, tokenLoader } from './actions/auth';
+import {
+  checkTokenLoader,
+  loginSignupAction,
+  logoutAction,
+  tokenLoader
+} from './actions/auth';
 import {
   addUpdateEventAction,
   deleteEventAction,
@@ -43,20 +48,22 @@ const router = createBrowserRouter([
             loader: eventByIdLoader,
             children: [
               {
+                path: 'edit',
+                element: <EditEventPage />,
+                loader: checkTokenLoader,
+                action: addUpdateEventAction
+              },
+              {
                 index: true,
                 element: <EventDetailPage />,
                 action: deleteEventAction
-              },
-              {
-                path: 'edit',
-                element: <EditEventPage />,
-                action: addUpdateEventAction
               }
             ]
           },
           {
             path: 'new',
             element: <NewEventPage />,
+            loader: checkTokenLoader,
             action: addUpdateEventAction
           }
         ]

@@ -48,3 +48,13 @@ export const logoutAction = () => {
 };
 
 export const tokenLoader = () => getAuthToken();
+
+export const checkTokenLoader = () => {
+  const token = getAuthToken();
+
+  if (!token) {
+    return redirect('/auth');
+  }
+
+  return null;
+};
