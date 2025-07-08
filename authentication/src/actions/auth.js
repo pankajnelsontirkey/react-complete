@@ -1,6 +1,7 @@
 import { redirect } from 'react-router-dom';
 
 import { API_HOST } from '../utils/constants';
+import { getAuthToken } from '../utils/auth';
 
 export const loginSignupAction = async ({ request }) => {
   const searchParams = new URL(request.url).searchParams;
@@ -37,6 +38,27 @@ export const loginSignupAction = async ({ request }) => {
   const { token } = await response.json();
 
   localStorage.setItem('token', token);
+  const expiration = new Date();
+  expiration.setHours(expiration.getHours() + 1);
+  localStorage.setItem('expiration', expiration.toISOString());
 
   return redirect('/');
+};
+
+export const logoutAction = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('expiration');
+  return redirect('/');
+};
+
+export const tokenLoader = () => getAuthToken();
+
+export const checkTokenLoader = () => {
+  const token = getAuthToken();
+
+  if (!token) {
+    return redirect('/auth');
+  }
+
+  return null;
 };
