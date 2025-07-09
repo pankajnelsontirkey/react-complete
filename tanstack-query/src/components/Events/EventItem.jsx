@@ -8,6 +8,7 @@ export default function EventItem({ event }) {
     month: 'short',
     year: 'numeric'
   });
+
   return (
     <article className='event-item'>
       <img src={`${API_HOST}/${event.image}`} alt={event.title} />
