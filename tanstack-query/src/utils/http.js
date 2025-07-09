@@ -19,3 +19,24 @@ export async function fetchEvents({ signal, searchTerm }) {
 
   return events;
 }
+
+export async function addEvent(eventData) {
+  let url = `${API_HOST}/events`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(eventData),
+    headers: { 'Content-Type': 'application/json' }
+  });
+
+  if (!response.ok) {
+    const error = new Error('An error occurred while creating a new event!');
+    error.code = response.status;
+    error.info = await response.json();
+    throw error;
+  }
+
+  const { event } = await response.json();
+
+  return event;
+}
