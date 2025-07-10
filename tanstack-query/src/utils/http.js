@@ -83,13 +83,12 @@ export async function fetchEventById({ signal, id }) {
 export async function deleteEvent(id) {
   let url = `${API_HOST}/events/${id}`;
 
-  const response = fetch(url, { method: 'DELETE' });
+  const response = await fetch(url, { method: 'DELETE' });
 
   if (!response.ok) {
     const error = new Error('An error occurred while fetching event details');
     error.code = response.status;
     error.info = await response.json();
-
     return error;
   }
 

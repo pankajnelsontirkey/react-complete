@@ -18,13 +18,19 @@ export default function EventDetails() {
   const { mutate } = useMutation({
     mutationFn: deleteEvent,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['events'] });
-      navigate('/events');
+      queryClient.invalidateQueries({
+        queryKey: ['events'],
+        refetchType: 'none'
+      });
     }
   });
 
   const handleDelete = () => {
-    mutate(id);
+    mutate(id, {
+      onSuccess: () => {
+        navigate('/events');
+      }
+    });
   };
 
   let content = '';
@@ -59,6 +65,7 @@ export default function EventDetails() {
           <nav>
             <button onClick={handleDelete}>Delete</button>
             <Link to='edit'>Edit</Link>
+            {JSON.stringify(isPending)}
           </nav>
         </header>
         <div id='event-details-content'>
