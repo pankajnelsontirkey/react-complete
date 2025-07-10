@@ -5,7 +5,10 @@ import {
   createBrowserRouter
 } from 'react-router-dom';
 
-import EditEvent from './components/Events/EditEvent.jsx';
+import EditEvent, {
+  // action as editEventaction,
+  loader as editEventLoader
+} from './components/Events/EditEvent.jsx';
 import EventDetails from './components/Events/EventDetails.jsx';
 import Events from './components/Events/Events.jsx';
 import NewEvent from './components/Events/NewEvent.jsx';
@@ -33,7 +36,9 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/events/:id/edit',
-        element: <EditEvent />
+        element: <EditEvent />,
+        loader: editEventLoader
+        // action: editEventaction
       }
     ]
   }
