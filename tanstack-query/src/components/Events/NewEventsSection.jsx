@@ -12,6 +12,7 @@ export default function NewEventsSection() {
     staleTime: 5000
     // gcTime: 1000,
   });
+
   let content;
 
   if (isPending) {
