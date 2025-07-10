@@ -72,7 +72,7 @@ export async function fetchEventById({ signal, id }) {
     error.code = response.status;
     error.info = await response.json();
 
-    return error;
+    throw error;
   }
 
   const { event } = await response.json();
@@ -89,7 +89,7 @@ export async function deleteEvent(id) {
     const error = new Error('An error occurred while fetching event details');
     error.code = response.status;
     error.info = await response.json();
-    return error;
+    throw error;
   }
 
   return response.json();
