@@ -4,12 +4,17 @@ import { API_HOST } from './constants';
 
 export const queryClient = new QueryClient();
 
-export async function fetchEvents({ signal, searchTerm }) {
+export async function fetchEvents({ signal, searchTerm, max }) {
   let url = `${API_HOST}/events`;
 
-  if (searchTerm) {
+  if (searchTerm && max) {
+    url += `?search=${searchTerm}&max=${max}`;
+  } else if (searchTerm) {
     url += `?search=${searchTerm}`;
+  } else if (max) {
+    url += `?max=${max}`;
   }
+
   const response = await fetch(url, { signal });
 
   if (!response.ok) {
