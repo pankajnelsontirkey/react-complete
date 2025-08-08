@@ -9,3 +9,7 @@ export async function getMeals() {
 
   return db.prepare('SELECT * FROM meals').all();
 }
+
+export function getMeal(mealSlug) {
+  return db.prepare('SELECT * FROM meals WHERE slug = ? ').get(mealSlug);
+}
