@@ -3,7 +3,11 @@
 import { redirect } from 'next/navigation';
 import { saveMeal } from './meals';
 
-export async function shareMeal(formData) {
+const isInvalidText = (text) => {
+  return !text || text.trim() === '';
+};
+
+export async function shareMeal(prevState, formData) {
   const {
     title,
     summary,
@@ -21,6 +25,24 @@ export async function shareMeal(formData) {
   };
   meal.image = formData.get('image');
 
+  if (
+    isInvalidText(meal.title) ||
+    isInvalidText(meal.summary) ||
+    isInvalidText(meal.instructions) ||
+    isInvalidText(meal.creator) ||
+    isInvalidText(meal.creator_email) ||
+    !meal.creator_email.includes('@') ||
+    !meal.image ||
+    meal.image.size === 0
+  ) {
+    // throw new Error('Invalid input');
+    return {
+      message: 'Invalid input'
+    };
+  }
+
   await saveMeal(meal);
+  // setTimeout(() => {
   redirect('/meals');
+  // }, [2000]);
 }
