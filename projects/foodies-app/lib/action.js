@@ -1,6 +1,8 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+
 import { saveMeal } from './meals';
 
 const isInvalidText = (text) => {
@@ -36,13 +38,12 @@ export async function shareMeal(prevState, formData) {
     meal.image.size === 0
   ) {
     // throw new Error('Invalid input');
-    return {
-      message: 'Invalid input'
-    };
+    return { message: 'Invalid input' };
   }
 
   await saveMeal(meal);
-  // setTimeout(() => {
+
+  revalidatePath('/meals');
+
   redirect('/meals');
-  // }, [2000]);
 }

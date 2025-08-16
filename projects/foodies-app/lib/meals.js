@@ -1,8 +1,20 @@
-import fs from 'node:fs';
+import { S3 } from '@aws-sdk/client-s3';
 import sql from 'better-sqlite3';
 import slugify from 'slugify';
 import xss from 'xss';
+import {
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
+  S3_BUCKET_NAME
+} from './constants';
 
+const s3 = new S3({
+  region: 'ap-south-1',
+  credentials: {
+    accessKeyId: AWS_ACCESS_KEY_ID,
+    secretAccessKey: AWS_SECRET_ACCESS_KEY
+  }
+});
 const db = sql('meals.db');
 
 export async function getMeals() {
@@ -23,17 +35,25 @@ export async function saveMeal(meal) {
 
   const extension = meal.image.name.split('.').pop();
   const fileName = `${meal.slug}_${new Date().toISOString()}.${extension}`;
-  const filePath = `public/images/${fileName}`;
 
-  const stream = fs.createWriteStream(filePath);
+  // const filePath = `public/images/${fileName}`;
+
   const bufferedImage = await meal.image.arrayBuffer();
-  stream.write(Buffer.from(bufferedImage), (error) => {
-    if (error) {
-      throw new Error('Error while saving image to filesystem!');
-    }
+  // const stream = fs.createWriteStream(filePath);
+  // stream.write(Buffer.from(bufferedImage), (error) => {
+  //   if (error) {
+  //     throw new Error('Error while saving image to filesystem!');
+  //   }
+  // });
+
+  s3.putObject({
+    Bucket: S3_BUCKET_NAME,
+    Key: fileName,
+    Body: Buffer.from(bufferedImage),
+    ContentType: meal.image.type
   });
 
-  meal.image = `/images/${fileName}`;
+  meal.image = fileName;
 
   db.prepare(
     `

@@ -1,8 +1,22 @@
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
+import { S3_BUCKET_URL } from '@/lib/constants';
 
 import { getMeal } from '@/lib/meals';
 import styles from './page.module.css';
-import { notFound } from 'next/navigation';
+
+export async function generateMetadata({ params }) {
+  const meal = getMeal(params.mealSlug);
+
+  if (!meal) {
+    notFound();
+  }
+
+  return {
+    title: meal.title,
+    description: meal.summary
+  };
+}
 
 export default function MealDetailsPage({ params }) {
   const { mealSlug } = params;
@@ -19,7 +33,7 @@ export default function MealDetailsPage({ params }) {
     <>
       <header className={styles.header}>
         <div className={styles.image}>
-          <Image src={meal.image} fill alt='' />
+          <Image src={`${S3_BUCKET_URL}/${meal.image}`} fill alt='' />
         </div>
         <div className={styles.headerText}>
           <h1>{meal.title}</h1>
