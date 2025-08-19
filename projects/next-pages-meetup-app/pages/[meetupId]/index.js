@@ -1,46 +1,37 @@
+import { getDb } from '@/lib/db';
+
 import MeetupDetails from '@/components/meetups/MeetupDetails';
 
 export default function MeetupDetailsPage({ details }) {
-  return (
-    <>
-      <MeetupDetails {...details} />
-    </>
-  );
+  return <MeetupDetails {...details} />;
 }
 
 export async function getStaticPaths() {
-  return {
-    fallback: false,
-    paths: [
-      {
-        params: {
-          meetupId: 'm1'
-        }
-      },
-      {
-        params: {
-          meetupId: 'm2'
-        }
-      },
-      {
-        params: {
-          meetupId: 'm3'
-        }
-      }
-    ]
-  };
+  const { collection, closeClient } = await getDb('meetups');
+
+  const documents = await collection.find().project({ _id: 1 }).toArray();
+  const ids = documents.map((item) => item._id.toString());
+
+  const paths = ids.map((id) => ({ params: { meetupId: id } }));
+
+  closeClient();
+
+  return { fallback: false, paths };
 }
 
 export async function getStaticProps(context) {
+  const { collection, closeClient, ObjectId } = await getDb('meetups');
+  const { meetupId } = context.params;
+
+  const document = await collection.findOne({ _id: new ObjectId(meetupId) });
+
+  const { _id, title, image, address, description } = document;
+
+  closeClient();
+
   return {
     props: {
-      details: {
-        id: 'm1',
-        title: 'First Mixer',
-        image:
-          'https://fastly.picsum.photos/id/152/300/300.jpg?hmac=dm_GPki-2zVGdmmOTDJdIQzItJi7zC0gbCSSw4N2Hxk',
-        address: 'Some address'
-      }
+      details: { id: _id.toString(), title, image, address, description }
     }
   };
 }
