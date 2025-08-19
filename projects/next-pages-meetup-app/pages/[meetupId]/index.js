@@ -1,9 +1,18 @@
-import { getDb } from '@/lib/db';
+import Head from 'next/head';
 
 import MeetupDetails from '@/components/meetups/MeetupDetails';
+import { getDb } from '@/lib/db';
 
 export default function MeetupDetailsPage({ details }) {
-  return <MeetupDetails {...details} />;
+  return (
+    <>
+      <Head>
+        <title>{details.title}</title>
+        <meta name='description' content={details.description} />
+      </Head>
+      <MeetupDetails {...details} />
+    </>
+  );
 }
 
 export async function getStaticPaths() {

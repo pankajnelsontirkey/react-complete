@@ -1,10 +1,15 @@
-import { getDb } from '@/lib/db';
+import Head from 'next/head';
 
 import MeetupList from '@/components/meetups/MeetupList';
+import { getDb } from '@/lib/db';
 
 export default function HomePage({ meetups }) {
   return (
     <>
+      <Head>
+        <title>NextJS Meetups</title>
+        <meta name='description' content='Tech meetups.' />
+      </Head>
       <MeetupList meetups={meetups} />
     </>
   );
