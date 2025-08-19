@@ -25,7 +25,7 @@ export async function getStaticPaths() {
 
   closeClient();
 
-  return { fallback: false, paths };
+  return { fallback: 'blocking', paths };
 }
 
 export async function getStaticProps(context) {
