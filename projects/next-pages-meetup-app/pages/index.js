@@ -32,11 +32,19 @@ export default function HomePage({ meetups }) {
   );
 }
 
-export async function getStaticProps() {
+// export async function getStaticProps() {
+//   return {
+// props: {
+// meetups: DUMMY_MEETUPS
+// },
+// revalidate: 10
+// };
+// }
+
+export async function getServerSideProps(context) {
   return {
     props: {
       meetups: DUMMY_MEETUPS
-    },
-    revalidate: 10
+    }
   };
 }
