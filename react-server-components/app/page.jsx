@@ -6,28 +6,32 @@ import { Suspense } from 'react';
 // import RSCDemo from '@/components/RSCDemo';
 // import ServerActionsDemo from '@/components/ServerActionsDemo';
 import UsePromiseDemo from '@/components/UsePromisesDemo';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 export default async function Home() {
-  const fetchUsersPromise = new Promise((resolve) =>
+  const fetchUsersPromise = new Promise((resolve, reject) =>
     setTimeout(async () => {
       const data = await fs.readFile('dummy-db.json', 'utf-8');
       const users = JSON.parse(data);
       resolve(users);
+      // reject(new Error('Error'));
     }, 2000)
   );
 
   return (
     <main>
-      {/* <p>Let's go!</p> */}
-      {/* <RSCDemo />
+      <ErrorBoundary fallback={<p>Something went wrong!</p>}>
+        {/* <p>Let's go!</p> */}
+        {/* <RSCDemo />
       <ClientDemo>
-        <RSCDemo />
+      <RSCDemo />
       </ClientDemo> */}
-      {/* <DataFetchingDemo /> */}
-      {/* <ServerActionsDemo /> */}
-      <Suspense fallback={<p>loading...</p>}>
-        <UsePromiseDemo usersPromise={fetchUsersPromise} />
-      </Suspense>
+        {/* <DataFetchingDemo /> */}
+        {/* <ServerActionsDemo /> */}
+        <Suspense fallback={<p>loading...</p>}>
+          <UsePromiseDemo usersPromise={fetchUsersPromise} />
+        </Suspense>
+      </ErrorBoundary>
     </main>
   );
 }
