@@ -17,9 +17,9 @@ export default function Header() {
     <>
       {isCreatingNewChallenge && <NewChallenge onDone={handleDone} />}
 
-      <header id="main-header">
+      <header id='main-header'>
         <h1>Your Challenges</h1>
-        <button onClick={handleStartAddNewChallenge} className="button">
+        <button onClick={handleStartAddNewChallenge} className='button'>
           Add Challenge
         </button>
       </header>

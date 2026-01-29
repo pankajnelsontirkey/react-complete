@@ -22,7 +22,7 @@ export default function NewChallenge({ onDone }) {
       title: title.current.value,
       description: description.current.value,
       deadline: deadline.current.value,
-      image: selectedImage,
+      image: selectedImage
     };
 
     if (
@@ -39,24 +39,24 @@ export default function NewChallenge({ onDone }) {
   }
 
   return (
-    <Modal title="New Challenge" onClose={onDone}>
-      <form id="new-challenge" onSubmit={handleSubmit}>
+    <Modal title='New Challenge' onClose={onDone}>
+      <form id='new-challenge' onSubmit={handleSubmit}>
         <p>
-          <label htmlFor="title">Title</label>
-          <input ref={title} type="text" name="title" id="title" />
+          <label htmlFor='title'>Title</label>
+          <input ref={title} type='text' name='title' id='title' />
         </p>
 
         <p>
-          <label htmlFor="description">Description</label>
-          <textarea ref={description} name="description" id="description" />
+          <label htmlFor='description'>Description</label>
+          <textarea ref={description} name='description' id='description' />
         </p>
 
         <p>
-          <label htmlFor="deadline">Deadline</label>
-          <input ref={deadline} type="date" name="deadline" id="deadline" />
+          <label htmlFor='deadline'>Deadline</label>
+          <input ref={deadline} type='date' name='deadline' id='deadline' />
         </p>
 
-        <ul id="new-challenge-images">
+        <ul id='new-challenge-images'>
           {images.map((image) => (
             <li
               key={image.alt}
@@ -68,8 +68,8 @@ export default function NewChallenge({ onDone }) {
           ))}
         </ul>
 
-        <p className="new-challenge-actions">
-          <button type="button" onClick={onDone}>
+        <p className='new-challenge-actions'>
+          <button type='button' onClick={onDone}>
             Cancel
           </button>
           <button>Add Challenge</button>
