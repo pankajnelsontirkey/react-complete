@@ -17,7 +17,7 @@ export function useAccordionContext() {
 }
 
 export default function Accordion({ children, className }) {
-  const [openItemId, setOpenItemId] = useState();
+  const [openItemId, setOpenItemId] = useState(null);
 
   function toggleItem(id) {
     setOpenItemId((prevId) => (prevId === id ? null : id));
