@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 
 import FavoritesPage from './containers/Favorites';
 import ProductsPage from './containers/Products';
+import ProductsProvider from './context/ProductsContext';
 import RootLayoutPage from './pages/RootLayoutPage';
 
 export default function App() {
@@ -19,5 +20,9 @@ export default function App() {
     }
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <ProductsProvider>
+      <RouterProvider router={router} />
+    </ProductsProvider>
+  );
 }

@@ -1,12 +1,11 @@
-import { useSelector } from 'react-redux';
+import { useContext } from 'react';
 
 import ProductItem from '../components/Products/ProductItem';
+import { ProductsContext } from '../context/ProductsContext';
 import './Products.css';
 
 export default function Products() {
-  const { products } = useSelector((state) => {
-    return state.products;
-  });
+  const { products } = useContext(ProductsContext);
 
   return (
     <>
