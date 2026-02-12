@@ -1,8 +1,25 @@
+import { useState } from 'react';
+
+import Output from './Output';
+
 export default function Greeting() {
+  const [changedText, setChangedText] = useState(false);
+
+  function changeTextHandler() {
+    setChangedText((prevVal) => !prevVal);
+  }
+
   return (
     <div>
       <h2>Hello World!</h2>
-      <p>It's good to see you!</p>
+      {/* {!changedText ? <p>It's good to see you!</p> : <p>Changed!</p>} */}
+      {!changedText ? (
+        <Output>It's good to see you!</Output>
+      ) : (
+        <Output>Changed!</Output>
+      )}
+
+      <button onClick={changeTextHandler}>Change Text!</button>
     </div>
   );
 }
