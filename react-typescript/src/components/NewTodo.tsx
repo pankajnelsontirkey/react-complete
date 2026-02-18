@@ -1,8 +1,10 @@
-import { useRef, type FC, type SubmitEvent } from 'react';
+import { useContext, useRef, type FC, type SubmitEvent } from 'react';
 
+import { TodosContext } from '../store/todosContext';
 import classes from './NewTodo.module.css';
 
-const NewTodo: FC<{ onAddTodo: (text: string) => void }> = ({ onAddTodo }) => {
+const NewTodo: FC = () => {
+  const { addToDo } = useContext(TodosContext);
   const todoTextRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (event: SubmitEvent) => {
@@ -13,7 +15,7 @@ const NewTodo: FC<{ onAddTodo: (text: string) => void }> = ({ onAddTodo }) => {
       return;
     }
 
-    onAddTodo(enteredText.trim());
+    addToDo(enteredText.trim());
 
     todoTextRef.current!.value = '';
   };
