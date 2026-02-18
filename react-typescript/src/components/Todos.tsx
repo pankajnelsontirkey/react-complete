@@ -10,7 +10,11 @@ const Todos: FC<
   return (
     <ul className={classes.todos}>
       {items.map((item) => (
-        <TodoItem key={item.id} {...item} handleRemoveTodo={onRemoveTodo} />
+        <TodoItem
+          key={item.id}
+          {...item}
+          handleRemoveTodo={onRemoveTodo.bind(null, item.id)}
+        />
       ))}
     </ul>
   );

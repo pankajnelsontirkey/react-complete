@@ -12,9 +12,7 @@ function App() {
   };
 
   const handleRemoveTodo: (idToRemove: string) => void = (idToRemove) => {
-    const updatedTodos = todos.filter((item) => item.id !== idToRemove);
-
-    setTodos(updatedTodos);
+    setTodos((prevTodos) => prevTodos.filter((item) => item.id !== idToRemove));
   };
 
   return (
